@@ -1,0 +1,46 @@
+{
+	"id": "pt",
+	"loc": {
+		"language": {
+			"en": "Inglês",
+			"pt": "Português"
+		},
+		"wacky_map": {
+			"0": "zero",
+			"cow": "muu",
+			"planet": "rotação",
+			"never": "nunca é esse"
+		},
+		"job": {
+			"gamer": "Gamer",
+			"dev": "Desenvolvedor{{compare::info.gender::==::f::a}}"
+		},
+		"person_desc": "Nome: {{cap::$name}} | Idade: {{%::info.age}} | Emprego: {{locmap::job::info.job}} | Gênero: {{map::info.gender::n==Neutro::f==Feminino::m==Masculino}}",
+		"animal": {
+			"array": "{{locmap::animal::animal}}",
+			"sheep": "Ovelha",
+			"cow": "Vaca",
+			"chicken": "Galinha"
+		},
+		"ui": {
+			"main": {
+				"button": {
+					"update_loc": "Emitir Update de Localização",
+					"toggle_bbcode": "Alternar BBCode",
+					"raw_text": "Ver Texto Não-Processado",
+					"see_code": "Ver Código Exemplo (main.gd)"
+				},
+				"tooltip": {
+					"button": {
+						"raw_text": "Pare entender que funções afetam o texto à esquerda.",
+						"see_code" : "Não funciona na versão web :("
+					},
+					"line_edit": "Determina texto da função customizada",
+					"spin": "Determina quantia de repetições da função customizada",
+					"spin2": "Determina tamanho da fonte"
+				},
+				"rich": "{{bbcode::font_size=$main.default_font_size::Ei!{{bbcode::font_size=50::{{bbcode::color=gold::Isso}}}} é o que consegues fazer com o {{quote::Addon de Localização da Rafaela!}}\nOlhe, essa próxima palavra é aleatória: {{random::teste::America::addon::Europa::{{bbcode::font_size=69::NICE{{#::Desculpe pela piada Reddit}}}}}}\nEsse é aleatório, mas só muda quando reabre a cena: {{locmap::wacky_map::main.wacky_map_value}}\nAqui está o anterior, mas em maiúsculo {{cap::{{locmap::wacky_map::main.wacky_map_value}}}}\n\nAqui um exemplo de uma função customizada (cheque demo/rafaelas_localization/main.gd) retorna o que tiver escrito no line edit na direita (emita update para atualizar): {{repeat::$main.repeat::1}}, te permite dizer quantas você quer que repita, aqui 5: {{repeat::$main.repeat::5}}, aqui há uma quantida determinada por uma das SpinBoxes na direita (atualmente é {{%::main.repeats::%s}}) {{repeat::$main.repeat::$main.repeats}}\n{{bbcode::color={{random::red::blue::yellow::white::green}}::{{bbcode::font_size={{random::1::2::3::4::5::6::7::8::9::10}}0::Cor e Tamanho Aleatórios!!}}}}\nUm exemplo de locarr:\n\tAnimais de fazenda:\n\t\t{{locarr::animal.array::main.array::animal::\n\t\t}}\nlocdict:\n\t{{locdict::person_desc::main.people::name::info::\n\t}}\nHere's an example of compare:\n\tO tamanho da fonte é maior que 50? {{compare::main.default_font_size::>::50::Yes::No}}, é {{%::main.default_font_size}}\nrange:\n\t O tamanho de fonte padrão é: {{range::main.default_font_size::10--Minusculo::20--Pequeno::30--Normal::50--Grande::70--Enorme::Massivo}}}}"
+			}
+		}
+	}
+}

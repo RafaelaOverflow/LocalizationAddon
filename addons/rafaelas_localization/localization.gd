@@ -75,6 +75,7 @@ static func get_leng(text:String,start) -> int:
 		while true:
 			for i in open:
 				c = text.find(CLOSE,c+CLOSEL)
+			if c == -1: return -1
 			open = text.countn(OPEN,last_c,c)
 			last_c = c
 			if open == 0: break
@@ -178,14 +179,44 @@ static var f : Dictionary[StringName,Callable]= {
 			var s = post_split(post)
 			var v = recursive_get(maybe_get(s[0],args),args)
 			return s[1] % v if s.size() == 2 else "%s" % v,
-		"map" : func(post,args):
-			var s = post_split(post)
-			var v = recursive_get(s[0],args)
-			if !v is String: v = "%s" % v
-			for i in range(1,s.size()):
-				var s2 = s[i].split("==")
-				if s2[0] == v: return s2[1]
-			return "",
+		"bbcode" : func(post,args):
+			var x := post_split(post)
+			if " " in x[0]:
+				var x2 := x[0].split(" ")
+				var x3 := ""
+				var i = 0
+				for x2_ in x2:
+					if i > 0: x3+=" "
+					var x3_ = x2_.split("=")
+					x3 += "%s=%s" % [x3_[0],maybe_get(x3_[1],args)]
+					i+=1
+				return "[%s]%s[/%s]" % [x3,x[1],x2[0]]
+			var x2 := x[0].split("=")
+			if x2.size() == 2: return "[%s=%s]%s[/%s]" % [x2[0],maybe_get(x2[1],args),x[1],x2[0]]
+			return "[%s]%s[/%s]" % [x[0],x[1],x[0]],
+		"cap" : func(post,args):
+			return process_text(maybe_get(post,args),args).capitalize(),
+		"compare" : func(post,args):
+			var c = post_split(post)
+			var v = recursive_get(c[0],args)
+			var compare = c[2].to_float() if c[2].is_valid_float() else c[2].to_int() if c[2].is_valid_int() else c[2]
+			var r = false
+			match c[1]:
+				">": r = v > compare
+				"<": r = v < compare
+				">=": r = v >= compare
+				"<=": r = v <= compare
+				"==": r = v == compare
+				"!=": r = v != compare
+			if r: return c[3]
+			return c[4] if c.size() == 5 else "",
+		"if" : func(post,args):
+			var x := post_split(post)
+			var i = recursive_get(maybe_get(x[0],args),args)
+			if bool(i): return x[1]
+			return x[2] if x.size() == 3 else "",
+		"loc" : func(post,args):
+			return localize(maybe_get(post,args),args),
 		"locmap" : func(post,args):
 			var s = post_split(post)
 			var v = recursive_get(s[1],args)
@@ -194,6 +225,10 @@ static var f : Dictionary[StringName,Callable]= {
 			var s = post_split(post)
 			var v = recursive_get(s[1],args)
 			return localize("%s.%s" % [v,s[0]],args),
+		"locmap!" : func(post,args):
+			var s = post_split(post)
+			var v = recursive_get(s[1],args)
+			return localize("%s.%s.%s" % [s[0],v,s[1]],args),
 		"locarr": func(post,args):
 			var s = post_split(post)
 			var loc_id = s[0]
@@ -227,37 +262,19 @@ static var f : Dictionary[StringName,Callable]= {
 					t += localize(loc_id,{n0:k,n1:dict[k],"args":args})
 					i+=1
 			return t,
-		"loc" : func(post,args):
-			return localize(maybe_get(post,args),args),
-		"compare" : func(post,args):
-			var c = post_split(post)
-			var v = recursive_get(c[0],args)
-			var compare = c[2].to_float() if c[2].is_valid_float() else c[2].to_int() if c[2].is_valid_int() else c[2]
-			var r = false
-			match c[1]:
-				">": r = v > compare
-				"<": r = v < compare
-				">=": r = v >= compare
-				"<=": r = v <= compare
-				"==": r = v == compare
-				"!=": r = v != compare
-			if r: return c[3]
-			return c[4] if c.size() == 5 else "",
-		"bbcode" : func(post,args):
-			var x := post_split(post)
-			if " " in x[0]:
-				var x2 := x[0].split(" ")
-				var x3 := ""
-				var i = 0
-				for x2_ in x2:
-					if i > 0: x3+=" "
-					var x3_ = x2_.split("=")
-					x3 += "%s=%s" % [x3_[0],maybe_get(x3_[1],args)]
-					i+=1
-				return "[%s]%s[/%s]" % [x3,x[1],x2[0]]
-			var x2 := x[0].split("=")
-			if x2.size() == 2: return "[%s=%s]%s[/%s]" % [x2[0],maybe_get(x2[1],args),x[1],x2[0]]
-			return "[%s]%s[/%s]" % [x[0],x[1],x[0]],
+		"map" : func(post,args):
+			var s = post_split(post)
+			var v = recursive_get(s[0],args)
+			if !v is String: v = "%s" % v
+			for i in range(1,s.size()):
+				var s2 = s[i].split("==")
+				if s2[0] == v: return s2[1]
+			return "",
+		"quote" : func(post,args):
+			return "\"%s\"" % post,
+		"random" : func(post,args):
+			var x = Localization.post_split(post)
+			return Array(x).pick_random(),
 		"range" : func(post,args):
 			var x := post_split(post)
 			var v = recursive_get(maybe_get(x[0],args),args)
@@ -267,18 +284,6 @@ static var f : Dictionary[StringName,Callable]= {
 				if y.size() == 1: return y[0]
 				if v <= y[0].to_float(): return y[1]
 			return "",
-		"cap" : func(post,args):
-			return process_text(maybe_get(post,args),args).capitalize(),
-		"if" : func(post,args):
-			var x := post_split(post)
-			var i = recursive_get(maybe_get(x[0],args),args)
-			if bool(i): return x[1]
-			return x[2] if x.size() == 3 else "",
-		"quote" : func(post,args):
-			return "\"%s\"" % post,
-		"random" : func(post,args):
-			var x = Localization.post_split(post)
-			return Array(x).pick_random(),
 	}
 # remember to make sure you function takes the parameters post and args
 static func register_function(id:StringName,function:Callable) -> void: f[id] = function

@@ -49,6 +49,10 @@ layout_mode = 2
 [node name="RawTextButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "test"
+
 [node name="SpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 min_value = 1.0
@@ -73,16 +77,18 @@ targets = {
 NodePath("../HBoxContainer/ScrollContainer/VBoxContainer/RichTextLabel"): PackedStringArray("text", "ui.main.rich"),
 NodePath("../HBoxContainer/VBoxContainer/UpdateLocButton"): PackedStringArray("text", "ui.main.button.update_loc"),
 NodePath("../HBoxContainer/VBoxContainer/ToggleBBCodeButton"): PackedStringArray("text", "ui.main.button.toggle_bbcode"),
-NodePath("../HBoxContainer/VBoxContainer/RawTextButton"): PackedStringArray("text", "ui.main.button.raw_text"),
-NodePath("../HBoxContainer/VBoxContainer/SeeCodeButton"): PackedStringArray("text", "ui.main.button.see_code"),
+NodePath("../HBoxContainer/VBoxContainer/RawTextButton"): PackedStringArray("text", "ui.main.button.raw_text", "tooltip_text", "ui.main.tooltip.button.raw_text"),
+NodePath("../HBoxContainer/VBoxContainer/SeeCodeButton"): PackedStringArray("text", "ui.main.button.see_code", "tooltip_text", "ui.main.tooltip.button.see_code"),
 NodePath("../HBoxContainer/VBoxContainer/SpinBox"): PackedStringArray("tooltip_text", "ui.main.tooltip.spin"),
-NodePath("../HBoxContainer/VBoxContainer/SpinBox2"): PackedStringArray("tooltip_text", "ui.main.tooltip.spin2")
+NodePath("../HBoxContainer/VBoxContainer/SpinBox2"): PackedStringArray("tooltip_text", "ui.main.tooltip.spin2"),
+NodePath("../HBoxContainer/VBoxContainer/LineEdit"): PackedStringArray("tooltip_text", "ui.main.tooltip.line_edit")
 }
 metadata/_custom_type_script = "uid://si3lb6imdkxl"
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/UpdateLocButton" to="." method="_on_update_loc_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/ToggleBBCodeButton" to="." method="_on_toggle_bb_code_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/RawTextButton" to="." method="_on_raw_text_button_pressed"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="value_changed" from="HBoxContainer/VBoxContainer/SpinBox" to="." method="_on_spin_box_value_changed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/SeeCodeButton" to="." method="_on_see_code_button_pressed"]
 [connection signal="value_changed" from="HBoxContainer/VBoxContainer/SpinBox2" to="." method="_on_spin_box_2_value_changed"]

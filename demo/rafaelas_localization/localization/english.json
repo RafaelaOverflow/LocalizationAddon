@@ -25,20 +25,21 @@
 		"ui": {
 			"main": {
 				"button": {
-					"tooltip": {
-						"reload_loc": "So you can change the localization file and see the changes without having to reopen the scene!"
-					},
 					"update_loc": "Emit Localization Update",
 					"toggle_bbcode": "Toggle BBCode",
 					"raw_text": "See Raw Text",
-					"reload_loc": "Reload Localization",
 					"see_code": "See Example Code (main.gd)"
 				},
 				"tooltip": {
-					"spin": "Sets amount of flags",
+					"button" : {
+						"raw_text" : "To understand which functions affect the text to the left.",
+						"see_code" : "Doesn't work on web :("
+					},
+					"line_edit": "Sets the text of the custom function",
+					"spin": "Sets amount of repetitions of the custom function",
 					"spin2": "Sets font size"
 				},
-				"rich": "{{bbcode::font_size=$main.default_font_size::Hey!{{bbcode::font_size=50::{{bbcode::color=gold::This}}}} is what you can do with {{quote::Rafaela's Localization Addon!}}\nLook this next word is random: {{random::test::America::addon::Europe::{{bbcode::font_size=69::NICE{{#::Sorry for the reddit joke}}}}}}\nThis one is random, but only changes when you reopen the scene: {{locmap::wacky_map::main.wacky_map_value}}\nHere's the previous one, but capitalized {{cap::{{locmap::wacky_map::main.wacky_map_value}}}}\n\nHere's an example of a custom function (check demo/rafaelas_localization/main.gd) it returns the trans flag emoji: {{custom::1}}, it allows you to set how many flags you want, here's 5: {{custom::5}}, here there are a amount of flags set by one of the spin boxes on the right (currently it's {{%::main.flags::%s}}) {{custom::$main.flags}}\n{{bbcode::color={{random::red::blue::yellow::white::green}}::{{bbcode::font_size={{random::1::2::3::4::5::6::7::8::9::10}}0::Random Color and Size!!}}}}\nAn example of locarr:\n\tFarm Animals:\n\t\t{{locarr::animal.array::main.array::animal::\n\t\t}}\nlocdict:\n\t{{locdict::person_desc::main.people::name::info::\n\t}}\ncompare:\n\tIs the default font size bigger than 50? {{compare::main.default_font_size::>::50::Yes::No}}, it is {{%::main.default_font_size}}\nrange:\n\t The default font size is: {{range::main.default_font_size::10--Very Small::20--Small::30--Normal::50--Big::70--Huge::Massive}}}}"
+				"rich": "{{bbcode::font_size=$main.default_font_size::Hey!{{bbcode::font_size=50::{{bbcode::color=gold::This}}}} is what you can do with {{quote::Rafaela's Localization Addon!}}\nLook this next word is random: {{random::test::America::addon::Europe::{{bbcode::font_size=69::NICE{{#::Sorry for the reddit joke}}}}}}\nThis one is random, but only changes when you reopen the scene: {{locmap::wacky_map::main.wacky_map_value}}\nHere's the previous one, but capitalized {{cap::{{locmap::wacky_map::main.wacky_map_value}}}}\n\nHere's an example of a custom function (check demo/rafaelas_localization/main.gd) it returns whatever you have written in the line edit on the right (emit update to show): {{repeat::$main.repeat::5}}, it allows you to set how many times you want it to repeat, here's 5: {{repeat::$main.repeat::5}}, here there are a amount set by one of the spin boxes on the right (currently it's {{%::main.repeats::%s}}) {{repeat::$main.repeat::$main.repeats}}\n{{bbcode::color={{random::red::blue::yellow::white::green}}::{{bbcode::font_size={{random::1::2::3::4::5::6::7::8::9::10}}0::Random Color and Size!!}}}}\nAn example of locarr:\n\tFarm Animals:\n\t\t{{locarr::animal.array::main.array::animal::\n\t\t}}\nlocdict:\n\t{{locdict::person_desc::main.people::name::info::\n\t}}\ncompare:\n\tIs the default font size bigger than 50? {{compare::main.default_font_size::>::50::Yes::No}}, it is {{%::main.default_font_size}}\nrange:\n\t The default font size is: {{range::main.default_font_size::10--Very Small::20--Small::30--Normal::50--Big::70--Huge::Massive}}}}"
 			}
 		}
 	}
