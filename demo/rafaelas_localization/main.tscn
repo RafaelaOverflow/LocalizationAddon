@@ -1,0 +1,89 @@
+[gd_scene load_steps=3 format=3 uid="uid://doid44jk8a4k0"]
+
+[ext_resource type="Script" uid="uid://d18rxvkpd1gtm" path="res://demo/rafaelas_localization/main.gd" id="1_m14cj"]
+[ext_resource type="Script" uid="uid://si3lb6imdkxl" path="res://addons/rafaelas_localization/localizer.gd" id="2_sr8j3"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m14cj")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+fit_content = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="UpdateLocButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ToggleBBCodeButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RawTextButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+rounded = true
+
+[node name="SeeCodeButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpinBox2" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 30.0
+
+[node name="LanguageOptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+allow_reselect = true
+
+[node name="Localizer" type="Node" parent="." node_paths=PackedStringArray("targets")]
+script = ExtResource("2_sr8j3")
+targets = {
+NodePath("../HBoxContainer/ScrollContainer/VBoxContainer/RichTextLabel"): PackedStringArray("text", "ui.main.rich"),
+NodePath("../HBoxContainer/VBoxContainer/UpdateLocButton"): PackedStringArray("text", "ui.main.button.update_loc"),
+NodePath("../HBoxContainer/VBoxContainer/ToggleBBCodeButton"): PackedStringArray("text", "ui.main.button.toggle_bbcode"),
+NodePath("../HBoxContainer/VBoxContainer/RawTextButton"): PackedStringArray("text", "ui.main.button.raw_text"),
+NodePath("../HBoxContainer/VBoxContainer/SeeCodeButton"): PackedStringArray("text", "ui.main.button.see_code"),
+NodePath("../HBoxContainer/VBoxContainer/SpinBox"): PackedStringArray("tooltip_text", "ui.main.tooltip.spin"),
+NodePath("../HBoxContainer/VBoxContainer/SpinBox2"): PackedStringArray("tooltip_text", "ui.main.tooltip.spin2")
+}
+metadata/_custom_type_script = "uid://si3lb6imdkxl"
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/UpdateLocButton" to="." method="_on_update_loc_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/ToggleBBCodeButton" to="." method="_on_toggle_bb_code_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/RawTextButton" to="." method="_on_raw_text_button_pressed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/SpinBox" to="." method="_on_spin_box_value_changed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/SeeCodeButton" to="." method="_on_see_code_button_pressed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/SpinBox2" to="." method="_on_spin_box_2_value_changed"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer/LanguageOptionButton" to="." method="_on_language_option_button_item_selected"]
