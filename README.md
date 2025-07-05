@@ -1,6 +1,6 @@
-# Rafaela's Localization Addon
+# Rafaela's Localization System
 
-In most of my Godot projects throught the years I have used variations of the same Localization system.
+In most of my Godot projects through the years I have used variations of the same Localization system.
 So I thought, "If I'm gonna put this in all of my projects, wouldn't it be easier to just make it an Addon?"
 
 There are comments on the code explaining how it works and an example in the demo folder (you can try it on the web, here: https://rafaelaoverflow.github.io/localization_addon_example.html) , but here's an overview:

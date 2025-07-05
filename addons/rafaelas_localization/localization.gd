@@ -51,7 +51,7 @@ static var loc_data := {}
 # {"info":{"language_id":"[LANGUAGE ID HERE]"},"data":{}}
 # you could call Localization.load_localization(lid,folders,"info.language_id","data")
 # btw reminder to when exporting to make sure .json files get included in the export (if you are using .json files)
-static func load_localization(lid : String,folders:=["res://localization/"],id_key:="id",loc_key:="loc") -> void: #lid = localization id
+static func load_localization(lid : String,folders:=["res://localization/"],id_key:="id",loc_key:="loc") -> void: #lid = localization id / language id
 	loc_data.clear()
 	for folder in folders:
 		for f in DirAccess.get_files_at(folder):
@@ -98,8 +98,9 @@ static func post_split(text:String) -> PackedStringArray:
 			i+=OPENL
 			var leng = get_leng(text,i)
 			if leng == -1: break
-			i += leng+CLOSEL
+			i += leng
 			v.y = i
+			i += CLOSEL
 			sub.append(v)
 	for split in splits.duplicate():
 		for v : Vector2i in sub:
