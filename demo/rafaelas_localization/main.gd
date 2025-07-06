@@ -1,14 +1,13 @@
 extends Control
 
 @onready var rich: RichTextLabel = $HBoxContainer/ScrollContainer/VBoxContainer/RichTextLabel
-@onready var lob: OptionButton = $HBoxContainer/VBoxContainer/LanguageOptionButton
+@onready var language_option_button: OptionButton = $HBoxContainer/VBoxContainer/LanguageOptionButton
 
-const LOC_FOLDER = "res://demo/rafaelas_localization/localization/"
 var languages := [
 	"en",
 	"pt",
 ]
-var current_language := "en"
+
 
 var array := [
 	"sheep",
@@ -21,6 +20,9 @@ var people := {
 }
 var wacky_map_value : String = (["0","cow","planet"].pick_random())
 var default_font_size : int = 30
+
+const LOC_FOLDER = "res://demo/rafaelas_localization/localization/"
+var current_language := "en"
 func localization_setup() -> void:
 	Localization.add_global_arg("main",self)
 	Localization.register_function("repeat",func(post,args):
@@ -31,13 +33,13 @@ func localization_setup() -> void:
 		return text.repeat(amount)
 	)
 	Localization.connect_signal(localization_update)
-	Localization.load_localization("en",[LOC_FOLDER])
+	Localization.load_localization(current_language,[LOC_FOLDER])
 
 func localization_update() -> void:
-	lob.clear()
+	language_option_button.clear()
 	for l in languages:
-		lob.add_item(Localization.localize("language.%s"%l))
-	lob.selected = languages.find(current_language)
+		language_option_button.add_item(Localization.localize("language.%s"%l))
+	language_option_button.selected = languages.find(current_language)
 
 func _ready() -> void:
 	localization_setup()
