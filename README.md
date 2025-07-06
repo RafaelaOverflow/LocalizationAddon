@@ -114,13 +114,13 @@ if you don't like "{{", "::" and "}}", then you can:
 You can add your own functions if you want (you can see how in the section after this one).
 Here are the functions that come with the addon:
 
-#### "#"
+#### \#
 This always returns an empty string ("")
 So you can use it to write comments on the text:
 
 	"test blah blah blah {{#::nobody will be able to see this}}" -> "test blah blah blah"
 
-#### "%"
+#### %
 
 	args = {"value":5.5}
 	"{{%::value}}" -> "%s" % value -> "5.5"
@@ -243,20 +243,20 @@ Capitalizes
 	}
 	"{{locdict::person_desc::people::name::age::\n}}" -> "Name: John | Age: 20\nName: Rafaela | Age: 22"
 
-#### "map"
+#### map
 
 	args = {"animal":"cow"}
 	"{{map::animal::cow==moo::chicken==noise chicken makes}}" -> "moo"
 
-#### "quote"
+#### quote
 
 	"{{quote::test}}" -> "\"test\""
 
-#### "random"
+#### random
 
 	"{{random::Italy::France::Türkiye}}" -> could be any of these: "Italy", "France" or "Türkiye"
 
-#### "range"
+#### range
 
 	args = {"value":50}
 	"{{range::value::20--A::40--B::50--C::60--D::E}}" -> "C"
