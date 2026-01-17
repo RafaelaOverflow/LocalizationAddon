@@ -64,6 +64,35 @@ static func load_localization(lid : String,folders:=["res://localization/"],id_k
 				else: load_dict(loc_data,recursive_get(loc_key,d))
 	emit_update()
 
+#returns available localizatons in a {id:name} format
+#example:
+# {
+# "en":"English",
+# "pt":"Português",
+# }
+#by default assumes {"id":"en","name":"English"} format
+#if you localization formats is like that, all you have to do is
+#get_available_localizations(array of folders containing localization)
+#or just get_available_localizations() if your localizations are all located at res://localization/
+#if your format is something like {"data":{"language_id":"en","language_name":"English"}}
+#then you would have to call:
+#get_available_localizations(localization folders array,"data.language_id","data.language_name")
+static func get_available_localizations(folders:=["res://localization/"],id_key:="id",name_key:="name") -> Dictionary:
+	var r = {}
+	for folder in folders:
+		for f in DirAccess.get_files_at(folder):
+			f = folder + f
+			var d : Dictionary = JSON.parse_string(FileAccess.get_file_as_string(f))
+			if d == null:
+				push_error("unable to load localization file: %s" % f)
+			var id = recursive_get(id_key,d)
+			var lname = recursive_get(name_key,d)
+			if r.has(id):
+				if !lname == name_key:
+					r[id] = lname
+			else: r[id] = lname
+	return r
+
 #hope you don't ever have to modify the 2 functions below (get_leng and post_split), they are hell
 static func get_leng(text:String,start) -> int:
 	var c = text.find(CLOSE,start)
@@ -133,11 +162,31 @@ static func recursive_get(id : String, dict):
 		v = v.get(i)
 		if v == null: return id
 	return v
+static func recursive_has(id : String, dict):
+	var v = dict
+	for i in id.split("."):
+		if !v.has(i): return false
+		v = v[i]
+		if v == null: return id.ends_with(i)
+	return true
+static var mget = []
+#maybe get returns a different value depending on what the value begins with
+# (if value is not a String it will just be returned)
+# if it doesn't begin with anything special, then it will just return the value
 static func maybe_get(value,dict:Dictionary,default=value):
 	if !value is String: return value
 	if value.begins_with("$"): return recursive_get(value.trim_prefix("$"),dict)
 	if value.begins_with(OPEN): return Localization.process_text(value,dict)
+	for m in mget:
+		if value.begins_with(m[0]): return m[1].call(value.trim_prefix(),dict,default)
 	return default
+#here you can register custom mget functions
+#example:
+#register_mget("@",func(value,dict,default): 
+#	return recursive_get(value,dict) if recursive_has(value,dict) else recursive_get(value,global_args)
+#)
+static func register_mget(begins_with:String,f:Callable) -> void:
+	mget.append([begins_with,f])
 #so here's what this is all about! Localization!
 static func localize(id,args:={}) -> String:
 	var text = recursive_get(id,loc_data)
@@ -182,16 +231,6 @@ static var f : Dictionary[StringName,Callable]= {
 			return s[1] % v if s.size() == 2 else "%s" % v,
 		"bbcode" : func(post,args):
 			var x := post_split(post)
-			if " " in x[0]:
-				var x2 := x[0].split(" ")
-				var x3 := ""
-				var i = 0
-				for x2_ in x2:
-					if i > 0: x3+=" "
-					var x3_ = x2_.split("=")
-					x3 += "%s=%s" % [x3_[0],maybe_get(x3_[1],args)]
-					i+=1
-				return "[%s]%s[/%s]" % [x3,x[1],x2[0]]
 			var x2 := x[0].split("=")
 			if x2.size() == 2: return "[%s=%s]%s[/%s]" % [x2[0],maybe_get(x2[1],args),x[1],x2[0]]
 			return "[%s]%s[/%s]" % [x[0],x[1],x[0]],
@@ -229,7 +268,7 @@ static var f : Dictionary[StringName,Callable]= {
 		"locmap!" : func(post,args):
 			var s = post_split(post)
 			var v = recursive_get(s[1],args)
-			return localize("%s.%s.%s" % [s[0],v,s[1]],args),
+			return localize("%s.%s.%s" % [s[0],v,s[2]],args),
 		"locarr": func(post,args):
 			var s = post_split(post)
 			var loc_id = s[0]
