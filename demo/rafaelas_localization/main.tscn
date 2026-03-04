@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://doid44jk8a4k0"]
+[gd_scene format=3 uid="uid://doid44jk8a4k0"]
 
 [ext_resource type="Script" uid="uid://d18rxvkpd1gtm" path="res://demo/rafaelas_localization/main.gd" id="1_m14cj"]
 [ext_resource type="Script" uid="uid://si3lb6imdkxl" path="res://addons/rafaelas_localization/localizer.gd" id="2_sr8j3"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=1125673477]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_m14cj")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1294371680]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,58 +20,58 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer" unique_id=828525411]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer" unique_id=1891946672]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/ScrollContainer/VBoxContainer" unique_id=412871080]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 fit_content = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1582187802]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="UpdateLocButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="UpdateLocButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1050825070]
 layout_mode = 2
 
-[node name="ToggleBBCodeButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="ToggleBBCodeButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=25712580]
 layout_mode = 2
 
-[node name="RawTextButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="RawTextButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=945543987]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=622471417]
 layout_mode = 2
 text = "test"
 
-[node name="SpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer" unique_id=1034075726]
 layout_mode = 2
 min_value = 1.0
 value = 1.0
 rounded = true
 
-[node name="SeeCodeButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="SeeCodeButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1197007442]
 layout_mode = 2
 
-[node name="SpinBox2" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
+[node name="SpinBox2" type="SpinBox" parent="HBoxContainer/VBoxContainer" unique_id=724727079]
 layout_mode = 2
 min_value = 1.0
 value = 30.0
 
-[node name="LanguageOptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer"]
+[node name="LanguageOptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer" unique_id=2143980830]
 layout_mode = 2
 allow_reselect = true
 
-[node name="Localizer" type="Node" parent="." node_paths=PackedStringArray("targets")]
+[node name="Localizer" type="Node" parent="." unique_id=413155301 node_paths=PackedStringArray("targets")]
 script = ExtResource("2_sr8j3")
 targets = {
 NodePath("../HBoxContainer/ScrollContainer/VBoxContainer/RichTextLabel"): PackedStringArray("text", "ui.main.rich"),

@@ -41,6 +41,35 @@ static func load_dict(base : Dictionary, delta : Dictionary) -> Dictionary:
 		else: base[key] = delta[key]
 	return base
 
+static func csv_line(line:String) -> Array:
+	var r = []
+	#thank you stack overflow: https://stackoverflow.com/questions/18144431/split-a-csv-where-some-entries-have-double-quotes
+	var reg = RegEx.create_from_string('(?:^|,)(?=[^"]|(")?)"?((?(1)(?:[^"]|"")*|[^,"]*))"?(?=,|$)')
+	for result in reg.search_all(line):
+		var s = result.get_string()
+		s = s.trim_prefix(",")
+		s = s.trim_prefix('"')
+		s = s.trim_prefix('\"')
+		s = s.trim_suffix('"')
+		s = s.replace('""','"')
+		for i in [["\\n","\n"],["\\t","\t"]]:
+			s = s.replace(i[0],i[1])
+		r.append(s)
+	return r
+static func load_csv(lid,string:String):
+	var lines = string.split("\n")
+	var arr = []
+	for line in lines:
+		arr.append(csv_line(line))
+	var top = arr.pop_front()
+	var d = {}
+	if !lid in top: return {}
+	var p = top.find(lid)
+	for line in arr:
+		if line.size() == 1: continue
+		recursive_set(line[0],d,line[p])
+	return d
+
 static var loc_data := {}
 # you can set loc_data manually if you want,
 # but there's this function here below where you can just inform the folders you localization files are located 
@@ -56,12 +85,15 @@ static func load_localization(lid : String,folders:=["res://localization/"],id_k
 	for folder in folders:
 		for f in DirAccess.get_files_at(folder):
 			f = folder + f
-			var d : Dictionary = JSON.parse_string(FileAccess.get_file_as_string(f))
-			if d == null:
-				push_error("unable to load localization file: %s" % f)
-			if id_key.is_empty() or recursive_get(id_key,d) == lid:
-				if loc_key.is_empty(): load_dict(loc_data,d)
-				else: load_dict(loc_data,recursive_get(loc_key,d))
+			if f.ends_with(".json"):
+				var d : Dictionary = JSON.parse_string(FileAccess.get_file_as_string(f))
+				if d == null:
+					push_error("unable to load localization file: %s" % f)
+				if id_key.is_empty() or recursive_get(id_key,d) == lid:
+					if loc_key.is_empty(): load_dict(loc_data,d)
+					else: load_dict(loc_data,recursive_get(loc_key,d))
+			elif f.ends_with(".csv"):
+				load_dict(loc_data,load_csv(lid,FileAccess.get_file_as_string(f)))
 	emit_update()
 
 #returns available localizatons in a {id:name} format
@@ -82,15 +114,35 @@ static func get_available_localizations(folders:=["res://localization/"],id_key:
 	for folder in folders:
 		for f in DirAccess.get_files_at(folder):
 			f = folder + f
-			var d : Dictionary = JSON.parse_string(FileAccess.get_file_as_string(f))
-			if d == null:
-				push_error("unable to load localization file: %s" % f)
-			var id = recursive_get(id_key,d)
-			var lname = recursive_get(name_key,d)
-			if r.has(id):
-				if !lname == name_key:
-					r[id] = lname
-			else: r[id] = lname
+			if f.ends_with("json"):
+				var d : Dictionary = JSON.parse_string(FileAccess.get_file_as_string(f))
+				if d == null:
+					push_error("unable to load localization file: %s" % f)
+				var id = recursive_get(id_key,d)
+				var lname = recursive_get(name_key,d)
+				if r.has(id):
+					if !lname == name_key:
+						r[id] = lname
+				else: r[id] = lname
+			elif f.ends_with("csv"):
+				var lines = FileAccess.get_file_as_string(f).split("\n")
+				var name_line = null
+				for line in lines:
+					if line.begins_with("NAME"):
+						name_line = csv_line(line)
+						break
+				if name_line == null: continue
+				var top = csv_line(lines[0])
+				top.remove_at(0)
+				name_line.remove_at(0)
+				for l in top.size():
+					var id = top[l]
+					var lname = name_line[l]
+					if r.has(id):
+						if !lname == name_key:
+							r[id] = lname
+					else: r[id] = lname
+			
 	return r
 
 #hope you don't ever have to modify the 2 functions below (get_leng and post_split), they are hell
@@ -162,6 +214,20 @@ static func recursive_get(id : String, dict):
 		v = v.get(i)
 		if v == null: return id
 	return v
+static func recursive_set(id, dict, val) -> void:
+	var v = dict
+	var s = id
+	if s is String or s is StringName: s = s.split(".")
+	var ls = s[s.size()-1]
+	for k in s:
+		if k == ls: 
+			v[ls] = val
+		else:
+			var nv = v.get(k)
+			if nv == null:
+				nv = {}
+				v[k] = nv
+			v = nv
 static func recursive_has(id : String, dict):
 	var v = dict
 	for i in id.split("."):
