@@ -293,7 +293,7 @@ static var f : Dictionary[StringName,Callable]= {
 			return "",
 		"%" : func(post,args):
 			var s = post_split(post)
-			var v = recursive_get(maybe_get(s[0],args),args)
+			var v = maybe_get(maybe_get(s[0],args),args)
 			return s[1] % v if s.size() == 2 else "%s" % v,
 		"bbcode" : func(post,args):
 			var x := post_split(post)
@@ -304,7 +304,7 @@ static var f : Dictionary[StringName,Callable]= {
 			return process_text(maybe_get(post,args),args).capitalize(),
 		"compare" : func(post,args):
 			var c = post_split(post)
-			var v = recursive_get(c[0],args)
+			var v = maybe_get(c[0],args)
 			var compare = c[2].to_float() if c[2].is_valid_float() else c[2].to_int() if c[2].is_valid_int() else c[2]
 			var r = false
 			match c[1]:
@@ -325,21 +325,21 @@ static var f : Dictionary[StringName,Callable]= {
 			return localize(maybe_get(post,args),args),
 		"locmap" : func(post,args):
 			var s = post_split(post)
-			var v = recursive_get(s[1],args)
+			var v = maybe_get(s[1],args)
 			return localize("%s.%s" % [s[0],v],args),
 		"!locmap" : func(post,args):
 			var s = post_split(post)
-			var v = recursive_get(s[1],args)
+			var v = maybe_get(s[1],args)
 			return localize("%s.%s" % [v,s[0]],args),
 		"locmap!" : func(post,args):
 			var s = post_split(post)
-			var v = recursive_get(s[1],args)
+			var v = maybe_get(s[1],args)
 			return localize("%s.%s.%s" % [s[0],v,s[2]],args),
 		"locarr": func(post,args):
 			var s = post_split(post)
 			var loc_id = s[0]
 			var g = s[1]
-			var arr = recursive_get(g,args)
+			var arr = maybe_get(g,args)
 			var split
 			if s.size() == 3:
 				split = s[2]
@@ -356,7 +356,7 @@ static var f : Dictionary[StringName,Callable]= {
 		"locdict": func(post,args):
 			var s = post_split(post)
 			var loc_id = s[0]
-			var dict = recursive_get(maybe_get(s[1],args),args)
+			var dict = maybe_get(maybe_get(s[1],args),args)
 			var n0 = s[2]
 			var n1 = s[3]
 			var split = s[4]
@@ -370,7 +370,7 @@ static var f : Dictionary[StringName,Callable]= {
 			return t,
 		"map" : func(post,args):
 			var s = post_split(post)
-			var v = recursive_get(s[0],args)
+			var v = maybe_get(s[0],args)
 			if !v is String: v = "%s" % v
 			for i in range(1,s.size()):
 				var s2 = s[i].split("==")
@@ -383,7 +383,7 @@ static var f : Dictionary[StringName,Callable]= {
 			return Array(x).pick_random(),
 		"range" : func(post,args):
 			var x := post_split(post)
-			var v = recursive_get(maybe_get(x[0],args),args)
+			var v = maybe_get(maybe_get(x[0],args),args)
 			x.remove_at(0)
 			for x2 in x:
 				var y = x2.split("--")
