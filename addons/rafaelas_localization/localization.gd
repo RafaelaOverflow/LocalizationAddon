@@ -318,7 +318,7 @@ static var f : Dictionary[StringName,Callable]= {
 			return c[4] if c.size() == 5 else "",
 		"if" : func(post,args):
 			var x := post_split(post)
-			var i = recursive_get(maybe_get(x[0],args),args)
+			var i = maybe_get(maybe_get(x[0],args),args)
 			if bool(i): return x[1]
 			return x[2] if x.size() == 3 else "",
 		"loc" : func(post,args):
@@ -389,6 +389,15 @@ static var f : Dictionary[StringName,Callable]= {
 				var y = x2.split("--")
 				if y.size() == 1: return y[0]
 				if v <= y[0].to_float(): return y[1]
+			return "",
+		"equal" : func(post,args):
+			var x := post_split(post)
+			var v = maybe_get(maybe_get(x[0],args),args)
+			x.remove_at(0)
+			for x2 in x:
+				var y = x2.split("--")
+				if y.size() == 1: return y[0]
+				if v == y[0].to_float(): return y[1]
 			return "",
 	}
 # remember to make sure you function takes the parameters post and args

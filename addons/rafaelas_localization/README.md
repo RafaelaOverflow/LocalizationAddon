@@ -129,8 +129,8 @@ So you can use it to write comments on the text:
 #### %
 
 	args = {"value":5.5}
-	"{{%::value}}" -> "%s" % value -> "5.5"
-	"{{%::value::%d}}" -> "%d" % value -> "5"
+	"{{%::$value}}" -> "%s" % value -> "5.5"
+	"{{%::$value::%d}}" -> "%d" % value -> "5"
 
 #### bbcode
 (Remember to enable BBCode on the RichTextLabel)
@@ -176,13 +176,13 @@ Capitalizes
 		"things":{
 			"0":"thing 0",
 			"1":"thing 1",
-			"%":"thing {{%::thing}}"
+			"%":"thing {{%::$thing}}"
 		}
 	}
 	"{{loc::thing}}" -> localizes thing -> "the thing"
 	"{{loc::things.0}}" -> localizes things.0 -> "thing 0"
 	args = {"loc_id":"things.%","thing":5}
-	"{{loc::$loc_id}}" -> localizes things.% -> "thing {{%::thing}}" -> "thing 5"
+	"{{loc::$loc_id}}" -> localizes things.% -> "thing {{%::$thing}}" -> "thing 5"
 
 #### locmap
 
@@ -193,7 +193,7 @@ Capitalizes
 		}
 	}
 	args = {"animal":"cow"}
-	"{{locmap::animal_map::animal}}" -> localizes animal_map.cow -> "The Cow"
+	"{{locmap::animal_map::$animal}}" -> localizes animal_map.cow -> "The Cow"
 
 #### !locmap
 
@@ -206,7 +206,7 @@ Capitalizes
 		}
 	}
 	args = {"animal":"cow"}
-	"{{!locmap::sound::animal}}" -> localizes cow.sound -> "moo"
+	"{{!locmap::sound::$animal}}" -> localizes cow.sound -> "moo"
 
 #### locmap!
 
@@ -221,7 +221,7 @@ Capitalizes
 		}
 	}
 	args = {"animal":"cow"}
-	"{{!locmap::animal_map::animal::sound}}" -> localizes animal_map.cow.sound -> "moo"
+	"{{locmap!::animal_map::$animal::sound}}" -> localizes animal_map.cow.sound -> "moo"
 
 #### locarr
 
@@ -234,7 +234,7 @@ Capitalizes
 			{"name":"Rafaela","age":22}
 		]
 	}
-	"{{locarr::person_desc::people::person::\n}}" -> "Name: John | Age: 20\nName: Rafaela | Age: 22"
+	"{{locarr::person_desc::$people::person::\n}}" -> "Name: John | Age: 20\nName: Rafaela | Age: 22"
 
 #### locdict
 
@@ -247,7 +247,7 @@ Capitalizes
 			"Rafaela":22
 		}
 	}
-	"{{locdict::person_desc::people::name::age::\n}}" -> "Name: John | Age: 20\nName: Rafaela | Age: 22"
+	"{{locdict::person_desc::$people::name::age::\n}}" -> "Name: John | Age: 20\nName: Rafaela | Age: 22"
 
 #### map
 
@@ -265,13 +265,24 @@ Capitalizes
 #### range
 
 	args = {"value":50}
-	"{{range::value::20--A::40--B::50--C::60--D::E}}" -> "C"
+	"{{range::$value::20--A::40--B::50--C::60--D::E}}" -> "C"
 	args = {"value":51}
-	"{{range::value::20--A::40--B::50--C::60--D::E}}" -> "D"
+	"{{range::$value::20--A::40--B::50--C::60--D::E}}" -> "D"
 	args = {"value":61}
-	"{{range::value::20--A::40--B::50--C::60--D::E}}" -> "E"
+	"{{range::$value::20--A::40--B::50--C::60--D::E}}" -> "E"
 	args = {"value":0}
-	"{{range::value::20--A::40--B::50--C::60--D::E}}" -> "A"
+	"{{range::$value::20--A::40--B::50--C::60--D::E}}" -> "A"
+
+#### equal
+
+	args = {"value":49}
+	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "E"
+	args = {"value":50}
+	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "C"
+	args = {"value":51}
+	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "E"
+	args = {"value":61}
+	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "E"
 </details>
 <details><summary><h3>Adding Custom Functions</h3></summary>
 
