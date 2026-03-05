@@ -321,20 +321,20 @@ static var f : Dictionary[StringName,Callable]= {
 			var i = maybe_get(maybe_get(x[0],args),args)
 			if bool(i): return x[1]
 			return x[2] if x.size() == 3 else "",
+		"has" : func(post,args):
+			var x := post_split(post)
+			if recursive_has(maybe_get(x[0],args),args): return x[1]
+			return x[2] if x.size() == 3 else "",
 		"loc" : func(post,args):
 			return localize(maybe_get(post,args),args),
 		"locmap" : func(post,args):
 			var s = post_split(post)
-			var v = maybe_get(s[1],args)
-			return localize("%s.%s" % [s[0],v],args),
-		"!locmap" : func(post,args):
-			var s = post_split(post)
-			var v = maybe_get(s[1],args)
-			return localize("%s.%s" % [v,s[0]],args),
-		"locmap!" : func(post,args):
-			var s = post_split(post)
-			var v = maybe_get(s[1],args)
-			return localize("%s.%s.%s" % [s[0],v,s[2]],args),
+			var v = ""
+			for a in s:
+				var last = a==s[s.size()-1]
+				v+= maybe_get(a,args)
+				if !last: v+="."
+			return localize(v,args),
 		"locarr": func(post,args):
 			var s = post_split(post)
 			var loc_id = s[0]
@@ -368,14 +368,6 @@ static var f : Dictionary[StringName,Callable]= {
 					t += localize(loc_id,{n0:k,n1:dict[k],"args":args})
 					i+=1
 			return t,
-		"map" : func(post,args):
-			var s = post_split(post)
-			var v = maybe_get(s[0],args)
-			if !v is String: v = "%s" % v
-			for i in range(1,s.size()):
-				var s2 = s[i].split("==")
-				if s2[0] == v: return s2[1]
-			return "",
 		"quote" : func(post,args):
 			return "\"%s\"" % post,
 		"random" : func(post,args):
@@ -390,14 +382,14 @@ static var f : Dictionary[StringName,Callable]= {
 				if y.size() == 1: return y[0]
 				if v <= y[0].to_float(): return y[1]
 			return "",
-		"equal" : func(post,args):
+		"map" : func(post,args):
 			var x := post_split(post)
 			var v = maybe_get(maybe_get(x[0],args),args)
 			x.remove_at(0)
 			for x2 in x:
 				var y = x2.split("--")
 				if y.size() == 1: return y[0]
-				if v == y[0].to_float(): return y[1]
+				if str(v) == y[0]: return y[1]
 			return "",
 	}
 # remember to make sure you function takes the parameters post and args

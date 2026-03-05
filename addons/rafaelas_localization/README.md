@@ -5,7 +5,7 @@ So I thought, "If I'm gonna put this in all of my projects, wouldn't it be easie
 
 This is my first ever Addon, so feedback is very appreciated! (Please be kind, though!)
 
-There are comments on the code explaining how it works and an example in the demo folder (you can try it on the web, here: https://rafaelaoverflow.github.io/localization_addon_example.html) , but here's an overview:
+There are comments on the code explaining how it works and an example in the demo folder (you can try it on the web, here: https://rafaelaoverflow.github.io/localization_addon_example.html), but here's an overview:
 
 
 ## Localization
@@ -16,9 +16,11 @@ You can set the localization data manually
 
 	Localization.loc_data = {localization data inside here}
 
-Or use the very handy Localization.load_localization method! (to use it you must store your Localization as files in the JSON format (they don't need to end in ".json" though))
+Or use the very handy Localization.load_localization method! (to use it you must store your Localization as files in either the JSON format or the CSV format (they must end in .json if JSON and .csv if CSV))
 
 	Localization.load_localization(language id, array of folders where localization is located (default = ["res://localization/"]))
+
+### JSON
 By default it will expect a format like this:
 
 	{
@@ -49,6 +51,42 @@ However, what if instead of having the language id in your localization file, ea
 Then you should:
 
 	Localization.load_localization("",\[localization folder of the language you want\],"","")
+
+### CSV
+The CSV implementation is less flexible in it's format, but it allows for multiple languages in one document, it always expect the format to be like the following:
+
+| keys | language id | another language id |
+|---|---|---|
+| localization id | localization text | localization text for another language | 
+
+An example:
+
+| keys | en | pt |
+|---|---|---|
+| title | The Game's Title | O Título do Jogo | 
+| animal.cow | cow | vaca | 
+| animal.chicken | chicken | galinha |
+| ui.main_menu.button.new_game | New Game | Novo Jogo |
+
+You may have noticed the periods in some of the localization keys, you can use those to insert them into dictionaries when it gets loaded. The way loc_data would end up with the afformentioned example would be (assuming English is the selected language):
+
+	{
+		"title" : "The Game's Title",
+		"animal": {
+			"cow" : "cow",
+			"chicken" : "chicken"
+		},
+		"ui" : {
+			"main_menu" : {
+				"button" : {
+					"new_game" : "New Game"
+				}
+			}
+		}
+	}
+
+
+
 </details>
 <details><summary><h3>Localization.localize</h3></summary>
 
@@ -162,12 +200,26 @@ Capitalizes
 	"{{compare::value::<::6::Yes::No}}" -> "Yes"
 
 #### if
+
 	args = {"value":true}
 	"{{if::value::Yes}}" -> "Yes"
 	"{{if::value::Yes::No}}" -> "Yes"
 	args = {"value":false}
 	"{{if::value::Yes}}" -> ""
 	"{{if::value::Yes::No}}" -> "No"
+
+#### has
+
+	args = {"thing":{"6":7}}
+	"{{has::thing.6::Yes}}" -> "Yes"
+	"{{has::thing.6::Yes::No}}" -> "Yes"
+	args = {"thing":{}}
+	"{{has::thing.6::Yes}}" -> ""
+	"{{has::thing.6::Yes::No}}" -> "No"
+	args = {}
+	"{{has::thing.6::Yes}}" -> ""
+	"{{has::thing.6::Yes::No}}" -> "No"
+
 
 #### loc
 
@@ -194,9 +246,6 @@ Capitalizes
 	}
 	args = {"animal":"cow"}
 	"{{locmap::animal_map::$animal}}" -> localizes animal_map.cow -> "The Cow"
-
-#### !locmap
-
 	loc_data = {
 		"cow":{
 			"sound":"moo"
@@ -206,10 +255,7 @@ Capitalizes
 		}
 	}
 	args = {"animal":"cow"}
-	"{{!locmap::sound::$animal}}" -> localizes cow.sound -> "moo"
-
-#### locmap!
-
+	"{{locmap::$animal::sound}}" -> localizes cow.sound -> "moo"
 	loc_data = {
 		"animal_map" : {
 			"cow":{
@@ -221,7 +267,7 @@ Capitalizes
 		}
 	}
 	args = {"animal":"cow"}
-	"{{locmap!::animal_map::$animal::sound}}" -> localizes animal_map.cow.sound -> "moo"
+	"{{locmap::animal_map::$animal::sound}}" -> localizes animal_map.cow.sound -> "moo"
 
 #### locarr
 
@@ -249,11 +295,6 @@ Capitalizes
 	}
 	"{{locdict::person_desc::$people::name::age::\n}}" -> "Name: John | Age: 20\nName: Rafaela | Age: 22"
 
-#### map
-
-	args = {"animal":"cow"}
-	"{{map::animal::cow==moo::chicken==noise chicken makes}}" -> "moo"
-
 #### quote
 
 	"{{quote::test}}" -> "\"test\""
@@ -273,15 +314,13 @@ Capitalizes
 	args = {"value":0}
 	"{{range::$value::20--A::40--B::50--C::60--D::E}}" -> "A"
 
-#### equal
+#### map
 
 	args = {"value":49}
 	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "E"
 	args = {"value":50}
 	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "C"
 	args = {"value":51}
-	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "E"
-	args = {"value":61}
 	"{{equal::$value::20--A::40--B::50--C::60--D::E}}" -> "E"
 </details>
 <details><summary><h3>Adding Custom Functions</h3></summary>
@@ -434,5 +473,3 @@ I can see a few reasons:
 
 <br>
 <br>
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E4Y5I7B)
