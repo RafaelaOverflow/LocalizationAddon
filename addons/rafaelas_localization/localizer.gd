@@ -15,6 +15,7 @@ class_name Localizer
 # example ["text","button.new_game","tooltip_text","tooltip.new_game"]
 
 func _ready() -> void:
+	if Engine.is_editor_hint(): return
 	localize()
 	Localization.connect_signal(localize)
 

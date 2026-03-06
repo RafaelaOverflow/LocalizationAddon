@@ -81,7 +81,7 @@ NodePath("../HBoxContainer/VBoxContainer/RawTextButton"): PackedStringArray("tex
 NodePath("../HBoxContainer/VBoxContainer/SeeCodeButton"): PackedStringArray("text", "ui.main.button.see_code", "tooltip_text", "ui.main.tooltip.button.see_code"),
 NodePath("../HBoxContainer/VBoxContainer/SpinBox"): PackedStringArray("tooltip_text", "ui.main.tooltip.spin"),
 NodePath("../HBoxContainer/VBoxContainer/SpinBox2"): PackedStringArray("tooltip_text", "ui.main.tooltip.spin2"),
-NodePath("../HBoxContainer/VBoxContainer/LineEdit"): PackedStringArray("tooltip_text", "ui.main.tooltip.line_edit")
+NodePath("../HBoxContainer/VBoxContainer/LineEdit"): PackedStringArray("text", "ui.main.tooltip.line_edit")
 }
 metadata/_custom_type_script = "uid://si3lb6imdkxl"
 

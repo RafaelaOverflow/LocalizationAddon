@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://c2hjv7jk88ov3"]
+
+[ext_resource type="Script" uid="uid://b07xysa38mnqc" path="res://addons/rafaelas_localization/localizer_target.gd" id="1_tr2da"]
+
+[node name="LocalizerTarget" type="HBoxContainer" unique_id=1015471266]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tr2da")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=243459855]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NodeLabel" type="Label" parent="VBoxContainer" unique_id=619410858]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Remove" type="Button" parent="VBoxContainer" unique_id=1832324116]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Remove"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=538281334]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Properties" type="VBoxContainer" parent="VBoxContainer2" unique_id=575129605]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AddProperty" type="Button" parent="VBoxContainer2" unique_id=1674791538]
+layout_mode = 2
+text = "Add Property"
+
+[connection signal="pressed" from="VBoxContainer/Remove" to="." method="_on_remove_pressed"]
+[connection signal="pressed" from="VBoxContainer2/AddProperty" to="." method="_on_add_property_pressed"]

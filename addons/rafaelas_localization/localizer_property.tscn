@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://b7ofor8eyc5a8"]
+
+[ext_resource type="Script" uid="uid://cchx8b7c0dex0" path="res://addons/rafaelas_localization/localizer_property.gd" id="1_0dd6v"]
+
+[node name="LocalizerProperty" type="HBoxContainer" unique_id=1377113331]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0dd6v")
+
+[node name="Label" type="Label" parent="." unique_id=114243174]
+layout_mode = 2
+text = "Property Name:"
+
+[node name="Property" type="LineEdit" parent="." unique_id=1684296532]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="." unique_id=876709862]
+layout_mode = 2
+text = "Localization Id:"
+
+[node name="LocalizationId" type="LineEdit" parent="." unique_id=579737466]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Remove" type="Button" parent="." unique_id=1554516893]
+layout_mode = 2
+text = "Remove"
+
+[connection signal="text_changed" from="Property" to="." method="_on_property_text_changed"]
+[connection signal="text_changed" from="LocalizationId" to="." method="_on_localization_id_text_changed"]
+[connection signal="pressed" from="Remove" to="." method="_on_remove_pressed"]
